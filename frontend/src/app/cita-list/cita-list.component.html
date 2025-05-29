@@ -1,0 +1,23 @@
+<h2>Listado de Citas</h2>
+<button (click)="nuevaCita()">Nueva Cita</button>
+<table>
+  <tr>
+    <th>Paciente</th>
+    <th>Doctor</th>
+    <th>Fecha</th>
+    <th>Hora</th>
+    <th>Motivo</th>
+    <th>Acciones</th>
+  </tr>
+  <tr *ngFor="let cita of citas">
+    <td>{{ cita.paciente }}</td>
+    <td>{{ cita.doctor }}</td>
+    <td>{{ cita.fecha }}</td>
+    <td>{{ cita.hora }}</td>
+    <td>{{ cita.motivo }}</td>
+    <td>
+      <button (click)="editCita(cita.id!)">Editar</button>
+      <button (click)="deleteCita(cita.id!)">Eliminar</button>
+    </td>
+  </tr>
+</table>

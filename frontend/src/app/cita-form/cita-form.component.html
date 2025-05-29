@@ -1,0 +1,19 @@
+<h2>{{ isEdit ? 'Editar Cita' : 'Nueva Cita' }}</h2>
+<form (ngSubmit)="guardarCita()">
+  <label>Paciente:</label>
+  <input [(ngModel)]="cita.paciente" name="paciente" required>
+
+  <label>Doctor:</label>
+  <input [(ngModel)]="cita.doctor" name="doctor" required>
+
+  <label>Fecha:</label>
+  <input type="date" [(ngModel)]="cita.fecha" name="fecha" required>
+
+  <label>Hora:</label>
+  <input type="time" [(ngModel)]="cita.hora" name="hora" required>
+
+  <label>Motivo:</label>
+  <textarea [(ngModel)]="cita.motivo" name="motivo" required></textarea>
+
+  <button type="submit">{{ isEdit ? 'Actualizar' : 'Crear' }}</button>
+</form>
