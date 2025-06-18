@@ -1,8 +1,18 @@
+# ./backend/Dockerfile
 FROM python:3.9-slim-buster
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y build-essential libmariadb-dev libmariadb-dev-compat default-libmysqlclient-dev pkg-config
+# Instala dependencias (incluyendo netcat) en un solo RUN para reducir capas
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libmariadb-dev \
+    libmariadb-dev-compat \
+    default-libmysqlclient-dev \
+    pkg-config \
+    netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*  # Esta línea DEBE estar en el mismo RUN
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt

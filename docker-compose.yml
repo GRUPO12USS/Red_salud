@@ -1,32 +1,40 @@
 version: '3.8'
 
 services:
+
   db:
     image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password  # ¡Importante!
     environment:
       MYSQL_ROOT_PASSWORD: adminredsalud
       MYSQL_DATABASE: redsalud_db
       MYSQL_USER: redsalud_user
       MYSQL_PASSWORD: redsalud
     ports:
-      - "3306:3306"
+      - "3307:3306"  # Solo si necesitas acceder desde tu máquina local
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:  # Verifica si MySQL está listo
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   backend:
     build: ./backend
-    command: sh -c "sleep 5 && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "while ! (timeout 1 bash -c 'cat < /dev/null > /dev/tcp/db/3306') 2>/dev/null; do sleep 2; done; python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      DATABASE_HOST: db
-      DATABASE_NAME: redsalud_db
-      DATABASE_USER: django_user
-      DATABASE_PASSWORD: django_password
+      DATABASE_NAME: redsalud_db  # Estos deben coincidir con settings.py
+      DATABASE_USER: redsalud_user
+      DATABASE_PASSWORD: redsalud
+      DATABASE_HOST: db        
 
   frontend:
     build: ./frontend

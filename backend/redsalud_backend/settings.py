@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'redsalud_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': '3306',
+        'NAME': os.getenv('DATABASE_NAME', 'redsalud_db'),  # Valor por defecto
+        'USER': os.getenv('DATABASE_USER', 'redsalud_user'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'redsalud'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'PORT': os.getenv('DATABASE_PORT', '3306'),
     }
 }
 

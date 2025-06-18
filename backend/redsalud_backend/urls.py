@@ -14,19 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from reservas.views import CitaViewSet
+from django.urls import path
 from django.http import JsonResponse
 
 def root_view(request):
-    return JsonResponse({'mensaje': 'Bienvenido a la API de RedSalud. Usa /api/citas/'})
-
-
-router = DefaultRouter()
-router.register(r'citas', CitaViewSet)
+    return JsonResponse({'mensaje': 'Backend de RedSalud funcionando correctamente.'})
 
 urlpatterns = [
-    path('', root_view),  # 👈 esta línea maneja /
-    path('api/', include('citas.urls')),
+    path('', root_view),
 ]
