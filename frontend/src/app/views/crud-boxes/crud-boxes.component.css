@@ -1,0 +1,119 @@
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.material-icons {
+    vertical-align: middle;
+    margin-right: 6px;
+    font-size: 18px;
+}
+
+
+.btn-agregar {
+    background-color: #009CA6;
+}
+
+.btn-editar {
+    background-color: #4caf50;
+}
+
+.btn-eliminar {
+    background-color: #f44336;
+}
+
+.btn:hover {
+    filter: brightness(0.9);
+}
+
+.box-table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.box-table th,
+.box-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    table-layout: fixed;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.box-table td:last-child {
+  white-space: normal;
+}
+
+.box-table th {
+    background-color: #f2f2f2;
+}
+
+.formulario {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 16px;
+}
+
+.formulario label {
+    display: block;
+    margin-top: 10px;
+}
+
+.formulario input,
+.formulario select {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+}
+
+.formulario button {
+    margin-top: 10px;
+    margin-right: 8px;
+    padding: 6px 12px;
+}
+
+.logo {
+    height: 60px;
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.titulo-principal {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.subtitulo-filtros {
+  text-align: left;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #333;
+}
