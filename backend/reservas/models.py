@@ -1,12 +1,38 @@
-# models.py
 from django.db import models
 
-class Cita(models.Model):
-    paciente = models.CharField(max_length=100)
-    doctor = models.CharField(max_length=100)
-    fecha = models.DateField()
-    hora = models.TimeField()
-    motivo = models.TextField()
+class Box(models.Model):
+    numero = models.IntegerField()
+    piso = models.IntegerField()
+    inmueble = models.CharField(max_length=100)
+    estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('ocupado', 'Ocupado')])
 
     def __str__(self):
-        return f"{self.paciente} con {self.doctor} el {self.fecha} a las {self.hora}"
+        return f"Box {self.numero} - Piso {self.piso} - {self.estado}"
+
+class Especialista(models.Model):
+    nombre = models.CharField(max_length=100)
+    especialidad = models.CharField(max_length=100)
+    piso = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.nombre} - {self.especialidad}"
+
+class Paciente(models.Model):
+    nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    rut = models.CharField(max_length=12)
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} ({self.rut})"
+
+class Horario(models.Model):
+    especialista = models.ForeignKey(Especialista, on_delete=models.CASCADE)
+    box = models.ForeignKey(Box, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.SET_NULL, null=True, blank=True)
+    fecha = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+    disponible = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.fecha} - {self.hora_inicio}-{self.hora_fin} | Box {self.box.numero} | {self.especialista.nombre}"
