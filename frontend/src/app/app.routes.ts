@@ -15,5 +15,5 @@ export const routes: Routes = [
     { path: 'agenda', component: AgendaComponent },
     { path: 'agenda-usuario', component: AgendaUsuarioComponent },
     { path: 'admin/boxes', component: CrudBoxesComponent },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: 'admin/boxes', pathMatch: 'full' },
 ];

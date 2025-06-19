@@ -1,1 +1,93 @@
-<p>crud-boxes works!</p>
+<div class="container">
+    <img src="assets/img/logo-redsalud.png" alt="Logo RedSalud" class="logo">
+
+    <h1 class="titulo-principal">Gestión de Boxes Médicos</h1>
+    
+    <h2 class="subtitulo-filtros">Filtros de búsqueda</h2>
+    <div class="filtros" style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+        <!-- Filtro por número -->
+        <mat-form-field appearance="fill">
+            <mat-label>Número del Box</mat-label>
+            <input matInput [(ngModel)]="filtroNumero" placeholder="Buscar por número">
+        </mat-form-field>
+
+        <!-- Filtro por piso -->
+        <mat-form-field appearance="fill">
+            <mat-label>Piso</mat-label>
+            <mat-select [(ngModel)]="filtroPiso">
+                <mat-option value="todos">Todos</mat-option>
+                <mat-option *ngFor="let piso of pisosUnicos()" [value]="piso">Piso {{ piso }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Filtro por estado -->
+        <mat-form-field appearance="fill">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="filtroEstado">
+                <mat-option value="todos">Todos</mat-option>
+                <mat-option value="Disponible">Disponible</mat-option>
+                <mat-option value="Ocupado">Ocupado</mat-option>
+                <mat-option value="En Mantenimiento">En Mantenimiento</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+
+    <button (click)="abrirFormulario()" class="btn btn-agregar"><span class="material-icons">add</span> Agregar
+        Box</button>
+
+    <table class="box-table">
+        <colgroup>
+            <col style="width: 15%"> 
+            <col style="width: 25%"> 
+            <col style="width: 20%"> 
+            <col style="width: 25%"> 
+            <col style="width: 20%"> 
+
+        </colgroup>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Número de Box</th>
+                <th>Piso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let box of filteredBoxes()">
+                <td>Box {{ box.numero }}</td>
+                <td>{{ box.numero }}</td>
+                <td>{{ box.piso }}</td>
+                <td>{{ box.estado }}</td>
+                <td>
+                    <button class="btn btn-editar" (click)="editarBox(box)"><span class="material-icons">edit</span>
+                        Editar</button>
+                    <button class="btn btn-eliminar" (click)="eliminarBox(box.id)"><span
+                            class="material-icons">delete</span> Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="formulario" *ngIf="formVisible">
+        <h3>{{ boxEditando ? 'Editar Box' : 'Crear Box' }}</h3>
+        <form (ngSubmit)="guardarBox()">
+            <label>Número:</label>
+            <input [(ngModel)]="nuevoBox.numero" name="numero" required />
+
+            <label>Piso:</label>
+            <input [(ngModel)]="nuevoBox.piso" name="piso" required />
+
+            <label>Estado:</label>
+            <select [(ngModel)]="nuevoBox.estado" name="estado" required>
+                <option value="Disponible">Disponible</option>
+                <option value="Ocupado">Ocupado</option>
+                <option value="En Mantenimiento">En Mantenimiento</option>
+            </select>
+
+            <button type="submit">Guardar</button>
+            <button type="button" (click)="cerrarFormulario()">Cancelar</button>
+        </form>
+    </div>
+</div>
