@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CitaListComponent } from './cita-list.component';
+import { AgendaUsuarioComponent } from './agenda-usuario.component';
 
-describe('CitaListComponent', () => {
-  let component: CitaListComponent;
-  let fixture: ComponentFixture<CitaListComponent>;
+describe('AgendaUsuarioComponent', () => {
+  let component: AgendaUsuarioComponent;
+  let fixture: ComponentFixture<AgendaUsuarioComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CitaListComponent]
+      imports: [AgendaUsuarioComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CitaListComponent);
+    fixture = TestBed.createComponent(AgendaUsuarioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

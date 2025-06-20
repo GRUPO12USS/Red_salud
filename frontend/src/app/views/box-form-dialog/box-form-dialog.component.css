@@ -1,0 +1,74 @@
+.modal-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+input, select, mat-select {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.alerta-piso {
+  color: #e65100;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 4px 8px 4px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+mat-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+button.guardar {
+  background-color: #009CA6;
+}
+
+button.cancelar {
+  background-color: #f44336;
+}
+
+button:hover {
+  filter: brightness(0.9);
+}
+
+

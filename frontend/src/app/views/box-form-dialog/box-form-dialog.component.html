@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ box.id ? 'Editar Box' : 'Agregar Box' }}</h2>
+
+<div mat-dialog-content>
+  <form class="modal-container" #form="ngForm" (ngSubmit)="guardar()">
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Número del Box</mat-label>
+      <input matInput [(ngModel)]="box.numero" name="numero" (ngModelChange)="actualizarPisoDesdeNumero()" required #numero="ngModel">
+      <mat-error *ngIf="numero.invalid && (numero.dirty || numero.touched)">
+        El número de box es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Piso</mat-label>
+      <mat-select [(ngModel)]="box.piso" name="piso" (selectionChange)="onPisoEditado()" required #piso="ngModel">
+        <mat-option *ngFor="let p of pisosDisponibles" [value]="p">
+          Piso {{ p }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="piso.invalid && (piso.dirty || piso.touched)">
+        Debes seleccionar un piso.
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="pisoSugerido && box.piso !== pisoSugerido" class="alerta-piso">
+      ⚠️ El número ingresado sugiere que este box está en el piso {{ pisoSugerido }}, pero se seleccionó el piso {{ box.piso }}.
+    </div>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="box.estado" name="estado" required #estado="ngModel">
+        <mat-option value="Disponible">Disponible</mat-option>
+        <mat-option value="Ocupado">Ocupado</mat-option>
+        <mat-option value="En Mantenimiento">En Mantenimiento</mat-option>
+      </mat-select>
+      <mat-error *ngIf="estado.invalid && (estado.dirty || estado.touched)">
+        Debes seleccionar un estado.
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" class="guardar" type="submit" [disabled]="form.invalid" (click)="guardar()">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button class="cancelar" (click)="cancelar()">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
+</div>
