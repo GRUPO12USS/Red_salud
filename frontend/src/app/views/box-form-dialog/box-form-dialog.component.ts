@@ -47,7 +47,13 @@ export class BoxFormDialogComponent {
 
   obtenerPisoDesdeNumero(numero: string): string {
     if (!numero) return '';
-    return numero.length >= 3 ? numero.charAt(0) : '';
+    const posiblesDosDigitos = numero.slice(0, 2);
+
+    if (this.pisosDisponibles.includes(posiblesDosDigitos)) {
+    return posiblesDosDigitos;
+  }
+  const primerDigito = numero.charAt(0);
+  return this.pisosDisponibles.includes(primerDigito) ? primerDigito : '';     
   }
 
   verificarInconsistenciaDePiso() {

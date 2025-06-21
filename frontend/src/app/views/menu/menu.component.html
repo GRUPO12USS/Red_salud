@@ -1,1 +1,21 @@
-<p>menu works!</p>
+<mat-toolbar color="primary" class="topbar">
+  <img src="assets/img/logo-redsalud.png" alt="Logo" class="logo-toolbar" />
+  <span class="title">Gestión Clínica RedSalud</span>
+  <span class="spacer"></span>
+  <span>{{ usuario }} ({{ rol | titlecase }})</span>
+  <button mat-button color="warn" (click)="cerrarSesion()">
+    <mat-icon>logout</mat-icon> Cerrar sesión
+  </button>
+</mat-toolbar>
+
+<div class="card-container">
+  <mat-card class="menu-card" (click)="irAGestionPacientes()">
+    <mat-icon class="card-icon">inventory_2</mat-icon>
+    <div class="card-text">Gestión de Agenda Paciente</div>
+  </mat-card>
+
+  <mat-card class="menu-card" (click)="irAGestionOfertaEspecialistas()">
+    <mat-icon class="card-icon">assignment_ind</mat-icon>
+    <div class="card-text">Gestión Oferta de Especialistas</div>
+  </mat-card>
+</div>
