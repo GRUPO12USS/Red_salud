@@ -8,7 +8,10 @@ import { AgendaEspecialistasComponent } from './views/agenda-especialistas/agend
 import { AgendaPacientesComponent } from './views/agenda-pacientes/agenda-pacientes.component';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
+    {
+        path: 'login',
+        loadComponent: () => import('./views/login/login.component').then(m => m.LoginComponent)
+    },
     { path: 'admin/login', component: AdminLoginComponent },
     { path: 'menu', component: MenuComponent },
     { path: 'oferta-especialistas', component: OfertaEspecialistasComponent },

@@ -2,6 +2,7 @@
 
 <div mat-dialog-content>
   <form class="modal-container" #form="ngForm" (ngSubmit)="guardar()">
+
     <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Número del Box</mat-label>
       <input matInput [(ngModel)]="box.numero" name="numero" (ngModelChange)="actualizarPisoDesdeNumero()" required #numero="ngModel">
@@ -27,11 +28,19 @@
     </div>
 
     <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Nombre del Inmueble</mat-label>
+      <input matInput [(ngModel)]="box.inmueble" name="inmueble" required #inmueble="ngModel" placeholder="Ej: Vacunatorio">
+      <mat-error *ngIf="inmueble.invalid && (inmueble.dirty || inmueble.touched)">
+        El nombre del inmueble es obligatorio.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Estado</mat-label>
       <mat-select [(ngModel)]="box.estado" name="estado" required #estado="ngModel">
-        <mat-option value="Disponible">Disponible</mat-option>
-        <mat-option value="Ocupado">Ocupado</mat-option>
-        <mat-option value="En Mantenimiento">En Mantenimiento</mat-option>
+        <mat-option value="disponible">Disponible</mat-option>
+        <mat-option value="ocupado">Ocupado</mat-option>
+        <mat-option value="en_mantenimiento">En Mantenimiento</mat-option>
       </mat-select>
       <mat-error *ngIf="estado.invalid && (estado.dirty || estado.touched)">
         Debes seleccionar un estado.

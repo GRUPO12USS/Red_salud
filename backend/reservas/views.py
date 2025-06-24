@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from django.shortcuts import render
 from .models import Box, Especialista, Paciente, Horario
 from .serializers import BoxSerializer, EspecialistaSerializer, PacienteSerializer, HorarioSerializer
+from rest_framework import status
+
 
 class BoxViewSet(viewsets.ModelViewSet):
     queryset = Box.objects.all()
@@ -64,3 +66,20 @@ class ReporteView(APIView):
         })
 def home_view(request):
     return render(request, 'reservas/index.html')
+
+class BoxViewSet(viewsets.ModelViewSet):
+    queryset = Box.objects.all()
+    serializer_class = BoxSerializer
+
+    def create(self, request, *args, **kwargs):
+        print("=== Entrada a create ===")
+        print("Payload recibido:", request.data)
+
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            print("Errores de validación:", serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_create(serializer)
+        print("Box creado con éxito:", serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

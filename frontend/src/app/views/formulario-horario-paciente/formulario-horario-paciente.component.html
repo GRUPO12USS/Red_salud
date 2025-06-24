@@ -41,18 +41,18 @@
         <div class="advertencia-larga" *ngIf="mensajeAdvertencia">{{ mensajeAdvertencia }}</div>
 
         <mat-form-field class="full-width">
-          <mat-label>Especialidad</mat-label>
-          <input matInput formControlName="especialidad" required>
-          <mat-error *ngIf="formulario.get('especialidad')?.hasError('required') && formulario.get('especialidad')?.touched">
-            La especialidad es obligatoria
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
           <mat-label>Especialista</mat-label>
           <input matInput formControlName="especialista" required>
           <mat-error *ngIf="formulario.get('especialista')?.hasError('required') && formulario.get('especialista')?.touched">
             El especialista es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Especialidad</mat-label>
+          <input matInput formControlName="especialidad" required>
+          <mat-error *ngIf="formulario.get('especialidad')?.hasError('required') && formulario.get('especialidad')?.touched">
+            La especialidad es obligatoria
           </mat-error>
         </mat-form-field>
 

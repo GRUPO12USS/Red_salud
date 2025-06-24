@@ -4,7 +4,13 @@ class Box(models.Model):
     numero = models.IntegerField()
     piso = models.IntegerField()
     inmueble = models.CharField(max_length=100)
-    estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('ocupado', 'Ocupado')])
+    ESTADOS = [
+        ('disponible', 'Disponible'),
+        ('ocupado', 'Ocupado'),
+        ('en_mantenimiento', 'En Mantenimiento'),
+    ]
+    #estado = models.CharField(max_length=20, choices=[('disponible', 'Disponible'), ('ocupado', 'Ocupado')])
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
 
     def __str__(self):
         return f"Box {self.numero} - Piso {self.piso} - {self.estado}"
