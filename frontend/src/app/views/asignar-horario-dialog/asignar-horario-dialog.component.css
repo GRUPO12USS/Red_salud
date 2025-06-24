@@ -1,0 +1,46 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: #f4f6f8;
+  border-radius: 8px;
+}
+
+mat-form-field.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  background-color: #f4f6f8;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.botones-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.advertencia-larga {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  display: block;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Agregar oferta de especialista</h2>
+
+<mat-dialog-content [formGroup]="formulario" class="formulario-oferta">
+  <div class="grid grid-cols-1 gap-4">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Especialista</mat-label>
+      <input matInput formControlName="especialista" required/>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Especialidad</mat-label>
+      <input matInput formControlName="especialidad" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha inicio</mat-label>
+      <input matInput [matDatepicker]="inicio" formControlName="fechaInicio" [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
+      <mat-datepicker #inicio></mat-datepicker>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha fin</mat-label>
+      <input matInput [matDatepicker]="fin" formControlName="fechaFin" [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
+      <mat-datepicker #fin></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Horario disponible</mat-label>
+      <input matInput formControlName="horarioDisponible" placeholder="Ej: 08:00 - 12:00" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Observaciones</mat-label>
+      <textarea matInput formControlName="observaciones" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option value="Disponible">Disponible</mat-option>
+        <mat-option value="No disponible">No disponible</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="botones-acciones">
+        <button mat-raised-button color="primary" [disabled]="formulario.invalid" (click)="guardar()">Guardar</button>
+      <button mat-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</mat-dialog-content>

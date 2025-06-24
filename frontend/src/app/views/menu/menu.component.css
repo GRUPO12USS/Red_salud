@@ -1,4 +1,3 @@
-/* Barra superior (mat-toolbar) */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -17,12 +16,10 @@
   font-weight: 600;
 }
 
-/* Para que el espacio entre los elementos funcione */
 .spacer {
   flex: 1 1 auto;
 }
 
-/* Información de usuario y botón cerrar sesión */
 .topbar span {
   font-size: 14px;
   display: flex;
@@ -30,7 +27,6 @@
   gap: 8px;
 }
 
-/* Botón cerrar sesión */
 button[mat-button][color="warn"] {
   color: #f44336; /* rojo alerta */
   font-weight: 600;
@@ -39,12 +35,10 @@ button[mat-button][color="warn"] {
   gap: 4px;
 }
 
-/* Icono dentro del botón */
 button[mat-button][color="warn"] mat-icon {
   font-size: 20px;
 }
 
-/* Contenedor de tarjetas */
 .card-container {
   display: flex;
   gap: 40px;
@@ -53,7 +47,6 @@ button[mat-button][color="warn"] mat-icon {
   justify-content: center;
 }
 
-/* Estilo de cada mat-card */
 .menu-card {
   background-color: #009CA6;
   color: white;
@@ -76,13 +69,11 @@ button[mat-button][color="warn"] mat-icon {
   background-color: #007d85;
 }
 
-/* Icono dentro de las tarjetas */
 .card-icon {
   font-size: 60px;
   margin-bottom: 16px;
 }
 
-/* Texto dentro de las tarjetas */
 .card-text {
   font-size: 18px;
   font-weight: 600;

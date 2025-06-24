@@ -1,0 +1,36 @@
+.botones-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.formulario-oferta {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.botones-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+mat-dialog-content {
+  max-height: 70vh;
+  overflow: auto;
+}
+
+h2[mat-dialog-title] {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1e4c8f;
+}

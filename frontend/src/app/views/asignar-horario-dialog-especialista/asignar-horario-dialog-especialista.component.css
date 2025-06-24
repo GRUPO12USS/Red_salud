@@ -1,0 +1,41 @@
+mat-form-field {
+  width: 100%;
+}
+
+.acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+
+    button {
+      min-width: 100px;
+    }
+  }
+
+mat-dialog-content.formulario-asignacion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.advertencia-larga {
+  color: #e65100;
+  font-weight: 500;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+

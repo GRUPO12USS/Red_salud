@@ -19,7 +19,8 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
     MatInputModule,
     MatSelectModule,
     CommonModule,
-  MatIconModule],
+  MatIconModule,
+],
   templateUrl: './box-form-dialog.component.html',
   styleUrl: './box-form-dialog.component.css'
 })
@@ -38,7 +39,7 @@ export class BoxFormDialogComponent {
   constructor(
   public dialogRef: MatDialogRef<BoxFormDialogComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any,
-  private dialog: MatDialog   // 👈 agrega esta línea
+  private dialog: MatDialog  
 ) {
   if (data?.box) {
     this.box = { ...data.box };

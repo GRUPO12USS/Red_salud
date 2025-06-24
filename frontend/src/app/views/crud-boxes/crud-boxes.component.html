@@ -1,17 +1,23 @@
+<mat-toolbar color="primary" class="topbar">
+  <img src="assets/img/logo-redsalud.png" alt="Logo" class="logo-toolbar" />
+  <span class="title">Gestión Clínica RedSalud</span>
+  <span class="spacer"></span>
+  <span>{{ usuario }} ({{ rol | titlecase }})</span>
+  <button mat-button color="warn" (click)="cerrarSesion()">
+    <mat-icon>logout</mat-icon> Cerrar sesión
+  </button>
+</mat-toolbar>
 <div class="container">
-    <img src="assets/img/logo-redsalud.png" alt="Logo RedSalud" class="logo">
 
     <h1 class="titulo-principal">Gestión de Boxes Médicos</h1>
     
     <h2 class="subtitulo-filtros">Filtros de búsqueda</h2>
     <div class="filtros" style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
-        <!-- Filtro por número -->
         <mat-form-field appearance="fill">
             <mat-label>Número del Box</mat-label>
             <input matInput [(ngModel)]="filtroNumero" placeholder="Buscar por número">
         </mat-form-field>
 
-        <!-- Filtro por piso -->
         <mat-form-field appearance="fill">
             <mat-label>Piso</mat-label>
             <mat-select [(ngModel)]="filtroPiso">
@@ -20,7 +26,6 @@
             </mat-select>
         </mat-form-field>
 
-        <!-- Filtro por estado -->
         <mat-form-field appearance="fill">
             <mat-label>Estado</mat-label>
             <mat-select [(ngModel)]="filtroEstado">
