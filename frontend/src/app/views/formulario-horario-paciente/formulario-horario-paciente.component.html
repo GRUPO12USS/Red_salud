@@ -1,0 +1,91 @@
+<ng-container>
+  <div class="form-container"> 
+    <h2>Asignar nuevo horario</h2>
+
+    <div class="form-scroll-wrapper"> 
+      <form [formGroup]="formulario" (ngSubmit)="guardar()" class="form-content">
+        <mat-form-field class="full-width">
+          <mat-label>Nombre Paciente</mat-label>
+          <input matInput formControlName="nombrePaciente" required>
+          <mat-error *ngIf="formulario.get('nombrePaciente')?.hasError('required') && formulario.get('nombrePaciente')?.touched">
+            El nombre es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>RUT</mat-label>
+          <input matInput formControlName="rut" required>
+          <mat-error *ngIf="formulario.get('rut')?.hasError('required') && formulario.get('rut')?.touched">
+            El RUT es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Box</mat-label>
+          <input matInput formControlName="box" type="number" (wheel)="onWheel($event)" required>
+          <mat-error *ngIf="formulario.get('box')?.hasError('required') && formulario.get('box')?.touched">
+            El box es obligatorio
+          </mat-error>
+          <mat-error *ngIf="formulario.get('box')?.hasError('pattern') && formulario.get('box')?.touched">
+            El box debe ser un número
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Piso</mat-label>
+          <input matInput formControlName="piso" type="number" (wheel)="onWheel($event)" required>
+          <mat-error *ngIf="formulario.get('piso')?.hasError('required') && formulario.get('piso')?.touched">
+            El piso es obligatorio
+          </mat-error>
+        </mat-form-field>
+        <div class="advertencia-larga" *ngIf="mensajeAdvertencia">{{ mensajeAdvertencia }}</div>
+
+        <mat-form-field class="full-width">
+          <mat-label>Especialidad</mat-label>
+          <input matInput formControlName="especialidad" required>
+          <mat-error *ngIf="formulario.get('especialidad')?.hasError('required') && formulario.get('especialidad')?.touched">
+            La especialidad es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Especialista</mat-label>
+          <input matInput formControlName="especialista" required>
+          <mat-error *ngIf="formulario.get('especialista')?.hasError('required') && formulario.get('especialista')?.touched">
+            El especialista es obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fecha" required [min]="minDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="formulario.get('fecha')?.hasError('required') && formulario.get('fecha')?.touched">
+            La fecha es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Hora Inicio</mat-label>
+          <input matInput type="time" formControlName="horaInicio" required>
+          <mat-error *ngIf="formulario.get('horaInicio')?.hasError('required') && formulario.get('horaInicio')?.touched">
+            La hora de inicio es obligatoria
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Hora Fin</mat-label>
+          <input matInput type="time" formControlName="horaFin" required>
+          <mat-error *ngIf="formulario.get('horaFin')?.hasError('required') && formulario.get('horaFin')?.touched">
+            La hora de fin es obligatoria
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="botones-acciones">
+      <button mat-raised-button color="primary" [disabled]="!formulario.valid" (click)="guardar()">Guardar</button>
+      <button mat-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</ng-container>

@@ -2,3 +2,9 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* src/styles.css o src/styles.scss */
+.mat-mdc-dialog-container {
+  overflow: hidden !important; /* Fuerza a recortar cualquier cosa que se desborde */
+  border-radius: 12px !important; /* Asegura que el contenedor del diálogo tenga los bordes redondeados */
+}

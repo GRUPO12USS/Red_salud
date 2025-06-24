@@ -1,1 +1,83 @@
-<p>oferta-especialistas works!</p>
+<mat-toolbar color="primary" class="topbar">
+  <img src="assets/img/logo-redsalud.png" alt="Logo" class="logo-toolbar" />
+  <span class="title">Gestión Clínica RedSalud</span>
+  <span class="spacer"></span>
+  <span>{{ usuario }} ({{ rol | titlecase }})</span>
+  <button mat-button color="warn" (click)="cerrarSesion()">
+    <mat-icon>logout</mat-icon> Cerrar sesión
+  </button>
+</mat-toolbar>
+<button mat-button color="primary" (click)="volverAtras()">
+  <mat-icon>arrow_back</mat-icon> Volver
+</button>
+
+<h1>Gestión Oferta de Especialistas</h1>
+
+<div class="oferta-container">
+
+  <div class="botones-acciones">
+    <button mat-raised-button color="primary" (click)="abrirFormularioOferta()">
+      <mat-icon>add</mat-icon> Agregar oferta
+    </button>
+
+    <button mat-raised-button color="accent" (click)="irAgendaEspecialistas()">
+      <mat-icon>calendar_today</mat-icon> Ver agenda de especialistas
+    </button>
+  </div>
+
+
+  <table mat-table [dataSource]="ofertas" class="mat-elevation-z2 tabla-ofertas">
+
+    <ng-container matColumnDef="especialista">
+      <th mat-header-cell *matHeaderCellDef> Especialista </th>
+      <td mat-cell *matCellDef="let o"> {{ o.especialista }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="especialidad">
+      <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+      <td mat-cell *matCellDef="let o"> {{ o.especialidad }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaInicio">
+      <th mat-header-cell *matHeaderCellDef> Inicio </th>
+      <td mat-cell *matCellDef="let o"> {{ o.fechaInicio | date }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaFin">
+      <th mat-header-cell *matHeaderCellDef> Fin </th>
+      <td mat-cell *matCellDef="let o"> {{ o.fechaFin | date }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="horario">
+      <th mat-header-cell *matHeaderCellDef> Horario </th>
+      <td mat-cell *matCellDef="let o"> {{ o.horarioDisponible }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let o">
+        <span
+          [ngClass]="{'estado-Disponible': o.estado === 'Disponible', 'estado-No Disponible': o.estado === 'No Disponible'}">
+          {{ o.estado | titlecase}}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let o">
+        <button mat-icon-button color="accent" (click)="abrirFormularioOferta(o)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="warn" (click)="eliminarOferta(o.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+
+  </table>
+</div>

@@ -1,0 +1,80 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006978;
+  padding: 10px 20px;
+  color: white;
+}
+
+.logo-toolbar {
+  height: 50px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.topbar span {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button[mat-button][color="warn"] {
+  color: #f44336; /* rojo alerta */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+button[mat-button][color="warn"] mat-icon {
+  font-size: 20px;
+}
+
+.card-container {
+  display: flex;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.menu-card {
+  background-color: #009CA6;
+  color: white;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  padding: 20px;
+}
+
+.menu-card:hover {
+  transform: scale(1.05);
+  background-color: #007d85;
+}
+
+.card-icon {
+  font-size: 60px;
+  margin-bottom: 16px;
+}
+
+.card-text {
+  font-size: 18px;
+  font-weight: 600;
+}

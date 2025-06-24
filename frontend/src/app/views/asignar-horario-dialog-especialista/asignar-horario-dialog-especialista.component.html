@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Asignar horario a Especialista</h2>
+
+<mat-dialog-content [formGroup]="formulario" class="formulario-asignacion">
+
+    <div class="grid grid-cols-1 gap-4">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Especialista</mat-label>
+            <input matInput formControlName="especialista">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Especialidad</mat-label>
+            <input matInput formControlName="especialidad">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Box</mat-label>
+        
+            <input matInput type="number" pattern="[0-9]*" inputmode="numeric" formControlName="box" (wheel)="onWheel($event)">
+
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Piso</mat-label>
+            <input matInput formControlName="piso" type="number" (wheel)="onWheel($event)">
+        </mat-form-field>
+
+        <div *ngIf="mensajeAdvertencia" class="advertencia-larga">
+            {{ mensajeAdvertencia }}
+        </div>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="pickerFecha" formControlName="fecha" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerFecha"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFecha></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Hora inicio</mat-label>
+            <input matInput type="time" formControlName="horaInicio">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Hora fin</mat-label>
+            <input matInput type="time" formControlName="horaFin">
+        </mat-form-field>
+        <div class="acciones-formulario">
+            <button mat-raised-button color="primary" type="submit" [disabled]="formulario.invalid"
+                (click)="guardar()">Guardar</button>
+            <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        </div>
+
+    </div>
+</mat-dialog-content>

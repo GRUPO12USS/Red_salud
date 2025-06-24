@@ -117,3 +117,43 @@ h2 {
   font-size: 18px;
   color: #333;
 }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006978;
+  padding: 10px 20px;
+  color: white;
+}
+
+.logo-toolbar {
+  height: 50px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.topbar span {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button[mat-button][color="warn"] {
+  color: #f44336;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+button[mat-button][color="warn"] mat-icon {
+  font-size: 20px;
+}

@@ -1,0 +1,164 @@
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.filtros-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+
+}
+
+.semana-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #006978;
+}
+
+.mat-form-field {
+  flex: 1 1 200px;
+}
+
+.tabla-agenda {
+  overflow-x: auto;
+}
+
+.agenda {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.agenda th,
+.agenda td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.hora-col {
+  font-weight: bold;
+  background-color: #f3f3f3;
+  width: 80px;
+}
+
+.celda-agenda {
+  height: 70px;
+  position: relative;
+}
+
+.bloque-horario {
+  background-color: #e0f7fa;
+  border-left: 4px solid #0097a7;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.agenda-container {
+  max-width: 1100px;
+  margin: 20px auto;
+  overflow-x: auto;
+}
+
+.semana-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.tabla-agenda {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.tabla-agenda th, .tabla-agenda td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: top;
+  min-width: 120px;
+}
+
+.tabla-agenda th {
+  background-color: #006978;
+  color: white;
+  text-align: center;
+}
+
+.hora-col {
+  background-color: #f0f8f9;
+  font-weight: 600;
+  text-align: center;
+  width: 70px;
+}
+
+.bloque-horario {
+  background-color: #d9f0f3;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006978;
+  padding: 10px 20px;
+  color: white;
+}
+
+.logo-toolbar {
+  height: 50px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.topbar span {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button[mat-button][color="warn"] {
+  color: #f44336;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+button[mat-button][color="warn"] mat-icon {
+  font-size: 20px;
+}
+

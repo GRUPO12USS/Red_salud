@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="pagina-login">
+  <img src="assets/img/logo-redsalud.png" alt="Logo RedSalud" class="logo">
+  <h1>Sistemas de gestión de box de RedSalud</h1>
+
+  <div class="login-container">
+    <h1>Iniciar Sesión</h1>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Usuario</mat-label>
+      <input matInput [(ngModel)]="username" name="username" placeholder="Ingrese su usuario" required>
+      <mat-error *ngIf="mostrarError && !username">El usuario es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Contraseña</mat-label>
+      <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Ingrese su contraseña" required>
+      <mat-error *ngIf="mostrarError && !password">La contraseña es requerida</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Rol</mat-label>
+      <mat-select [(ngModel)]="rol" name="rol">
+        <mat-option value="admin">Administrador de Sistemas</mat-option>
+        <mat-option value="coordinador">Coordinador de Boxes</mat-option>
+      </mat-select>
+      <mat-error *ngIf="mostrarError && !rol">Debe seleccionar un rol</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="iniciarSesion()" style="width: 100%;">Iniciar Sesión</button>
+  </div>
+</div>

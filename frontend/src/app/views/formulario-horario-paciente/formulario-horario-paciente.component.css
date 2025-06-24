@@ -1,0 +1,80 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background-color: #f4f6f8;
+  border-radius: 12px;  
+  overflow: hidden;      
+  height: 100%;          
+  position: relative;    
+}
+
+
+.form-scroll-wrapper {
+  flex-grow: 1; 
+  overflow-y: auto; 
+  height: calc(100% - 100px); 
+  background-color: #f4f6f8; 
+  box-sizing: border-box;
+  overflow-x: hidden; 
+}
+
+form.form-content { 
+  display: flex;
+  flex-direction: column;
+  gap: 16px; 
+  padding-bottom: 16px; 
+}
+
+.form-scroll-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+.form-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  width: 3px;
+}
+
+
+mat-form-field.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  background-color: #f4f6f8;
+}
+
+.botones-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  margin-bottom: 0; 
+}
+
+.advertencia-larga {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

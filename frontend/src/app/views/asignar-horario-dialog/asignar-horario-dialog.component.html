@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Asignar nuevo horario</h2>
+
+<form (ngSubmit)="guardar()" #form="ngForm">
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Nombre Paciente</mat-label>
+    <input matInput [(ngModel)]="reserva.nombrePaciente" name="nombrePaciente" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>RUT</mat-label>
+    <input matInput [(ngModel)]="reserva.rut" name="rut" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Especialidad</mat-label>
+    <input matInput [(ngModel)]="reserva.especialidad" name="especialidad" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Especialista</mat-label>
+    <input matInput [(ngModel)]="reserva.especialista" name="especialista" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Box</mat-label>
+    <input matInput [(ngModel)]="reserva.box" name="box" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Piso</mat-label>
+    <input matInput [(ngModel)]="reserva.piso" name="piso" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Fecha</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="reserva.fecha" name="fecha" required />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Hora Inicio</mat-label>
+    <input matInput type="time" [(ngModel)]="reserva.horaInicio" name="horaInicio" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Hora Fin</mat-label>
+    <input matInput type="time" [(ngModel)]="reserva.horaFin" name="horaFin" required />
+  </mat-form-field>
+
+  <div class="acciones-dialogo">
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+</form>

@@ -1,0 +1,92 @@
+<mat-toolbar color="primary" class="topbar">
+  <img src="assets/img/logo-redsalud.png" alt="Logo" class="logo-toolbar" />
+  <span class="title">Gestión Clínica RedSalud</span>
+  <span class="spacer"></span>
+  <span>{{ usuario }} ({{ rol | titlecase }})</span>
+  <button mat-button color="warn" (click)="cerrarSesion()">
+    <mat-icon>logout</mat-icon> Cerrar sesión
+  </button>
+</mat-toolbar>
+
+<button mat-button color="primary" (click)="volverAtras()">
+  <mat-icon>arrow_back</mat-icon> Volver
+</button>
+<h1>Gestión de Agenda de Especialistas</h1>
+
+
+
+<div class="filtros-container">
+  <mat-form-field appearance="outline">
+    <mat-label>Especialista</mat-label>
+    <input matInput [formControl]="filtrosForm.controls['especialista']" placeholder="Nombre" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Especialidad</mat-label>
+    <input matInput [formControl]="filtrosForm.controls['especialidad']" placeholder="Especialidad" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Piso</mat-label>
+    <input matInput [formControl]="filtrosForm.controls['piso']" placeholder="Ej: 1" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Box</mat-label>
+    <input matInput [formControl]="filtrosForm.controls['box']" placeholder="Ej: 101" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="limpiarFiltros()">
+  <mat-icon>clear</mat-icon> Limpiar filtros
+</button>
+
+
+</div>
+
+<div class="agenda-container" *ngIf="horariosFiltrados.length > 0">
+    <button mat-raised-button color="primary" (click)="abrirFormularioAsignacion()">
+      <mat-icon>event</mat-icon>
+  Asignar horario
+</button>
+    <div class="semana-control">
+        <button mat-icon-button color="primary" (click)="cambiarSemana(-1)" matTooltip="Semana anterior">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <span class="semana-label">
+            {{ diasSemana[0].toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit' }) }} -
+            {{ diasSemana[6].toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit' }) }}
+        </span>
+
+        <button mat-icon-button color="primary" (click)="cambiarSemana(1)" matTooltip="Semana siguiente">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+    </div>
+
+<div class="tabla-agenda">
+  <table class="agenda">
+    <thead>
+      <tr>
+        <th>Hora</th>
+        <th *ngFor="let dia of diasSemana">
+          {{ dia | date:'EEEE dd/MM' : undefined : 'es-CL' }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hora of horarios">
+        <td class="hora-col">{{ hora }}</td>
+        <td *ngFor="let dia of diasSemana" class="celda-agenda">
+          <ng-container *ngFor="let bloque of obtenerBloques(dia, hora)">
+            <div class="bloque-horario">
+              <strong>{{ bloque.especialista }}</strong><br />
+              <span>{{ bloque.especialidad }}</span><br />
+              {{ bloque.horaInicio }} - {{ bloque.horaFin }}<br>
+              Box {{ bloque.box }} | Piso {{ bloque.piso }}
+            </div>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

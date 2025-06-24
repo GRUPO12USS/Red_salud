@@ -19,7 +19,8 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
     MatInputModule,
     MatSelectModule,
     CommonModule,
-  MatIconModule],
+  MatIconModule,
+],
   templateUrl: './box-form-dialog.component.html',
   styleUrl: './box-form-dialog.component.css'
 })
@@ -38,7 +39,7 @@ export class BoxFormDialogComponent {
   constructor(
   public dialogRef: MatDialogRef<BoxFormDialogComponent>,
   @Inject(MAT_DIALOG_DATA) public data: any,
-  private dialog: MatDialog   // 👈 agrega esta línea
+  private dialog: MatDialog  
 ) {
   if (data?.box) {
     this.box = { ...data.box };
@@ -47,7 +48,13 @@ export class BoxFormDialogComponent {
 
   obtenerPisoDesdeNumero(numero: string): string {
     if (!numero) return '';
-    return numero.length >= 3 ? numero.charAt(0) : '';
+    const posiblesDosDigitos = numero.slice(0, 2);
+
+    if (this.pisosDisponibles.includes(posiblesDosDigitos)) {
+    return posiblesDosDigitos;
+  }
+  const primerDigito = numero.charAt(0);
+  return this.pisosDisponibles.includes(primerDigito) ? primerDigito : '';     
   }
 
   verificarInconsistenciaDePiso() {
