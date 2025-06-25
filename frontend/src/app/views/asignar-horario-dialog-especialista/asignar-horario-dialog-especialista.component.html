@@ -4,10 +4,23 @@
 
     <div class="grid grid-cols-1 gap-4">
 
-        <mat-form-field appearance="fill">
-            <mat-label>Especialista</mat-label>
-            <input matInput formControlName="especialista">
-        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+  <mat-label>Especialista</mat-label>
+  <input
+    matInput
+    [matAutocomplete]="autoEsp"
+    formControlName="especialista"
+    required
+  />
+  <mat-autocomplete #autoEsp="matAutocomplete">
+    <mat-option
+      *ngFor="let e of ofertasFiltradas | async"
+      [value]="e.nombre"
+    >
+      {{ e.nombre }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
 
         <mat-form-field appearance="fill">
             <mat-label>Especialidad</mat-label>
@@ -16,8 +29,9 @@
 
         <mat-form-field appearance="fill">
             <mat-label>Box</mat-label>
-        
-            <input matInput type="number" pattern="[0-9]*" inputmode="numeric" formControlName="box" (wheel)="onWheel($event)">
+
+            <input matInput type="number" pattern="[0-9]*" inputmode="numeric" formControlName="box"
+                (wheel)="onWheel($event)">
 
         </mat-form-field>
 

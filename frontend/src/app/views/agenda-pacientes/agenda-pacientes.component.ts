@@ -44,6 +44,8 @@ export class AgendaPacientesComponent implements OnInit {
   usuario = 'UsuarioEjemplo';
   rol = 'Administrador de Sistemas';
 
+  private apiUrl = 'http://localhost:8000/api/agenda-pacientes/';
+
   constructor(private router: Router, private dialog: MatDialog, private dateAdapter: DateAdapter<Date>, private injector: Injector, private location: Location) {
      this.dateAdapter.setLocale('es-CL');
    }

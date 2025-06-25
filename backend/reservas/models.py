@@ -19,9 +19,30 @@ class Especialista(models.Model):
     nombre = models.CharField(max_length=100)
     especialidad = models.CharField(max_length=100)
     piso = models.IntegerField()
+    ESTADOS = [
+        ('Disponible', 'Disponible'),
+        ('No Disponible', 'No Disponible'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='Disponible')
 
     def __str__(self):
         return f"{self.nombre} - {self.especialidad}"
+
+class OfertaEspecialista(models.Model):
+    especialista = models.CharField(max_length=100)
+    especialidad = models.CharField(max_length=100)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    horario_disponible = models.CharField(max_length=200)
+    observaciones = models.TextField(blank=True, null=True)
+    ESTADOS = [
+        ('Disponible', 'Disponible'),
+        ('No Disponible', 'No Disponible'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='Disponible')
+
+    def __str__(self):
+        return f"{self.especialista} - {self.especialidad} ({self.estado})"
 
 class Paciente(models.Model):
     nombre = models.CharField(max_length=100)

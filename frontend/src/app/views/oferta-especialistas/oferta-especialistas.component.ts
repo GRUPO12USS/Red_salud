@@ -16,17 +16,8 @@ import { DateAdapter } from '@angular/material/core';
 import { Location } from '@angular/common';
 import { AgregarOfertaDialogEspecialistaComponent } from '../agregar-oferta-dialog-especialista/agregar-oferta-dialog-especialista.component';
 import { MatDialog } from '@angular/material/dialog';
-
-interface OfertaEspecialista {
-  id: number;
-  especialista: string;
-  especialidad: string;
-  fechaInicio: Date;
-  fechaFin: Date;
-  horarioDisponible: string;
-  observaciones?: string;
-  estado: 'Disponible' | 'No Disponible' | '';
-}
+import { EspecialistaService, Especialista } from '../../services/especialista.service';
+import { OfertaService, OfertaEspecialista } from '../../services/oferta.service';
 
 @Component({
   selector: 'app-oferta-especialistas',
@@ -40,8 +31,8 @@ interface OfertaEspecialista {
     CommonModule,
     MatTableModule,
     MatToolbarModule,
-  MatDatepickerModule,
-MatNativeDateModule],
+    MatDatepickerModule,
+    MatNativeDateModule],
   templateUrl: './oferta-especialistas.component.html',
   styleUrl: './oferta-especialistas.component.css'
 })
@@ -50,124 +41,72 @@ export class OfertaEspecialistasComponent implements OnInit {
   usuario = 'UsuarioEjemplo';
   rol = 'Administrador de Sistemas';
 
-  constructor(private router: Router, private dateAdapter: DateAdapter<Date>, private location: Location, private dialog: MatDialog) {
+  ofertas: OfertaEspecialista[] = [];
+  columnasTabla: string[] = ['especialista', 'especialidad', 'fecha_inicio', 'fecha_fin', 'horario_disponible', 'estado', 'acciones'];
+
+  constructor(private router: Router,
+    private dateAdapter: DateAdapter<Date>,
+    private location: Location,
+    private dialog: MatDialog,
+    private especialistaService: EspecialistaService,
+    private ofertaService: OfertaService) 
+    {
     this.dateAdapter.setLocale('es-CL');
-   }
+  }
 
   cerrarSesion() {
     this.router.navigate(['/login']);
   }
-
-  volverAtras(): void {
-  this.location.back();
-}
-
-irAgendaEspecialistas(): void {
-  this.router.navigate(['/agenda-especialistas']);
-}
-
-
-  ofertas: OfertaEspecialista[] = [];
-
-  columnasTabla: string[] = ['especialista', 'especialidad', 'fechaInicio', 'fechaFin', 'horario', 'estado', 'acciones'];
-  nuevaOferta: OfertaEspecialista = this.crearOfertaVacia();
-  mostrandoFormulario = false;
-  
-  abrirFormularioOferta(oferta?: OfertaEspecialista): void {
-  const dialogRef = this.dialog.open(AgregarOfertaDialogEspecialistaComponent, {
-    width: '500px',
-    disableClose: true,
-    data: oferta ? { ...oferta } : null
-  });
-
-  dialogRef.afterClosed().subscribe((result: OfertaEspecialista) => {
-    if (result) {
-      if (oferta) {
-
-        const index = this.ofertas.findIndex(o => o.id === oferta.id);
-        if (index !== -1) {
-    this.ofertas[index] = { ...result, id: oferta.id };
-    this.ofertas = [...this.ofertas];
-        }
-      } else {
-        const nuevoId = this.ofertas.length > 0 ? Math.max(...this.ofertas.map(o => o.id)) + 1 : 1;
-  this.ofertas = [...this.ofertas, { ...result, id: nuevoId }];
-      }
-    }
-  });
-}
 
   ngOnInit(): void {
     this.cargarOfertas();
   }
 
   cargarOfertas() {
-    this.ofertas = [
-      {
-        id: 1,
-        especialista: 'Dr. Juan Pérez',
-        especialidad: 'Cardiología',
-        fechaInicio: new Date('2025-07-01'),
-        fechaFin: new Date('2025-07-31'),
-        horarioDisponible: 'Lunes a Viernes 9:00-17:00',
-        observaciones: 'Disponibilidad limitada en julio',
-        estado: 'Disponible'
-      },
-      {
-        id: 2,
-        especialista: 'Dra. María López',
-        especialidad: 'Pediatría',
-        fechaInicio: new Date('2025-07-15'),
-        fechaFin: new Date('2025-08-15'),
-        horarioDisponible: 'Martes y Jueves 10:00-15:00',
-        estado: 'No Disponible'
+    this.ofertaService.getOfertas().subscribe({
+      next: (data) => this.ofertas = data,
+      error: (err) => console.error('Error al cargar ofertas', err)
+    });
+  }
+
+  volverAtras(): void {
+    this.location.back();
+  }
+
+  irAgendaEspecialistas(): void {
+    this.router.navigate(['/agenda-especialistas']);
+  }
+
+  abrirFormularioOferta(oferta?: OfertaEspecialista): void {
+    const dialogRef = this.dialog.open(AgregarOfertaDialogEspecialistaComponent, {
+      width: '500px',
+      disableClose: true,
+      data: oferta ? { ...oferta } : null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.id) {
+          this.ofertaService.actualizarOferta(result).subscribe({
+            next: () => this.cargarOfertas(),
+            error: (err) => console.error('Error actualizando oferta:', err)
+          });
+        } else {
+          this.ofertaService.crearOferta(result).subscribe({
+            next: () => this.cargarOfertas(),
+            error: (err) => console.error('Error creando oferta:', err)
+          });
+        }
       }
-    ];
+    });
   }
 
-  crearOfertaVacia(): OfertaEspecialista {
-    return {
-      id: 0,
-      especialista: '',
-      especialidad: '',
-      fechaInicio: new Date(),
-      fechaFin: new Date(),
-      horarioDisponible: '',
-      observaciones: '',
-      estado: ''
-    };
-  }
-
-  mostrarFormulario() {
-    this.mostrandoFormulario = true;
-  }
-
-  ocultarFormulario() {
-    this.mostrandoFormulario = false;
-    this.nuevaOferta = this.crearOfertaVacia();
-  }
-
-  guardarOferta() {
-    if (this.nuevaOferta.id === 0) {
-      const nuevoId = this.ofertas.length > 0 ? Math.max(...this.ofertas.map(o => o.id)) + 1 : 1;
-      this.nuevaOferta.id = nuevoId;
-      this.ofertas.push({ ...this.nuevaOferta });
-    } else {
-      const index = this.ofertas.findIndex(o => o.id === this.nuevaOferta.id);
-      if (index !== -1) {
-        this.ofertas[index] = { ...this.nuevaOferta };
-      }
+  eliminarOferta(id: number): void {
+    if (confirm('¿Estás seguro de eliminar esta oferta?')) {
+      this.ofertaService.eliminarOferta(id).subscribe({
+        next: () => this.cargarOfertas(),
+        error: (err) => console.error('Error eliminando oferta:', err)
+      });
     }
-    this.ocultarFormulario();
   }
-
-  editarOferta(oferta: OfertaEspecialista) {
-    this.nuevaOferta = { ...oferta };
-    this.mostrandoFormulario = true;
-  }
-
-  eliminarOferta(id: number) {
-    this.ofertas = this.ofertas.filter(o => o.id !== id);
-  }
-
 }

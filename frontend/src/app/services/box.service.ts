@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BoxService {
-  private apiUrl = 'http://localhost:8000/api/boxes/'; // ajusta si usas proxy o entorno docker
+  private apiUrl = 'http://localhost:8000/api/boxes/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getBoxes(): Observable<Box[]> {
     return this.http.get<Box[]>(this.apiUrl);
@@ -29,5 +29,9 @@ export class BoxService {
 
   deleteBox(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}${id}/`);
+  }
+
+  getBoxesDisponibles(): Observable<Box[]> {
+    return this.http.get<Box[]>(`${this.apiUrl}disponibles/`);
   }
 }

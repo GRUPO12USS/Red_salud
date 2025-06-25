@@ -11,6 +11,14 @@ import localeEsCL from '@angular/common/locales/es-CL';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { Box } from '../../models/box.model';
+import { Especialista, EspecialistaService } from '../../services/especialista.service';
+import { BoxService } from '../../services/box.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { map, Observable, startWith } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OfertaEspecialista, OfertaService } from '../../services/oferta.service';
 
 registerLocaleData(localeEsCL);
 
@@ -25,7 +33,9 @@ registerLocaleData(localeEsCL);
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatAutocompleteModule,
+    MatOptionModule,
   ],
   templateUrl: './asignar-horario-dialog-especialista.component.html',
   styleUrls: ['./asignar-horario-dialog-especialista.component.css'],
@@ -36,15 +46,26 @@ registerLocaleData(localeEsCL);
 })
 export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
   formulario: FormGroup;
+  minDate = new Date();
   pisoAutoDetectado: number | '' = '';
   mensajeAdvertencia: string = '';
+  especialistas: Especialista[] = [];
+  boxes: Box[] = [];
+  //especialistasFiltrados!: Observable<Especialista[]>;
+  //especialistasFiltrados: Observable<Especialista[]> = new Observable<Especialista[]>();
+  ofertas: OfertaEspecialista[] = [];
+  ofertasFiltradas: Observable<Especialista[]> = new Observable<Especialista[]>();
+
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AsignarHorarioDialogEspecialistaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private especialistaService: EspecialistaService,
+    private boxService: BoxService,
+    private ofertaService: OfertaService
   ) {
     this.formulario = this.fb.group({
       especialista: [null, Validators.required],
@@ -57,27 +78,71 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
     });
   }
 
-  minDate = new Date();
-
   ngOnInit(): void {
-  this.formulario.get('box')?.valueChanges.subscribe(boxValue => {
-    const pisoDetectado = this.obtenerPisoPorBox(boxValue);
-    const pisoNum = parseInt(pisoDetectado, 10);
-    if (!isNaN(pisoNum)) {
-      this.pisoAutoDetectado = pisoNum;
-      this.formulario.patchValue({ piso: pisoNum }, { emitEvent: false });
-      this.mensajeAdvertencia = '';
-    }
-  });
+    this.ofertaService.getOfertas().subscribe({
+      next: (res) => {
+        console.log('Especialistas cargados:', res);
+        this.ofertas = res;
+        //this.setupFiltroEspecialistas();
+        this.ofertasFiltradas  = this.formulario.get('especialista')!.valueChanges.pipe(
+          startWith(''),
+          map(value => {
+            console.log('Input autocomplete especialista:', value);
+            return this._filtrarEspecialistas(value || '');
+          })
+        );
+      },
+      error: (err) => console.error('Error al cargar especialistas', err)
+    });
 
-  this.formulario.get('piso')?.valueChanges.subscribe(pisoManual => {
-    if (this.pisoAutoDetectado && pisoManual !== this.pisoAutoDetectado) {
-      this.mensajeAdvertencia = `⚠️ Estás modificando el piso detectado automáticamente (${this.pisoAutoDetectado}).`;
-    } else {
-      this.mensajeAdvertencia = '';
-    }
-  });
-}
+    this.boxService.getBoxesDisponibles().subscribe({
+      next: (res) => this.boxes = res,
+      error: (err) => console.error('Error al cargar boxes', err)
+    });
+
+    this.formulario.get('especialista')?.valueChanges.subscribe(nombre => {
+      const esp = this.especialistas.find(e => e.nombre === nombre);
+      if (esp) {
+        this.formulario.patchValue({ especialidad: esp.especialidad, piso: esp.piso });
+      }
+    });
+    this.formulario.get('box')?.valueChanges.subscribe(boxValue => {
+      const pisoDetectado = this.obtenerPisoPorBox(boxValue);
+      const pisoNum = parseInt(pisoDetectado, 10);
+      if (!isNaN(pisoNum)) {
+        this.pisoAutoDetectado = pisoNum;
+        this.formulario.patchValue({ piso: pisoNum }, { emitEvent: false });
+        this.mensajeAdvertencia = '';
+      }
+    });
+
+    this.formulario.get('piso')?.valueChanges.subscribe(pisoManual => {
+      if (this.pisoAutoDetectado && pisoManual !== this.pisoAutoDetectado) {
+        this.mensajeAdvertencia = `⚠️ Estás modificando el piso detectado automáticamente (${this.pisoAutoDetectado}).`;
+      } else {
+        this.mensajeAdvertencia = '';
+      }
+    });
+  }
+
+
+
+  setupFiltroEspecialistas() {
+    this.ofertasFiltradas = this.formulario.get('especialista')!.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const filtered = this._filtrarEspecialistas(value || '');
+        console.log('Filtro especialistas con:', value, '=>', filtered);
+        return filtered;
+      })
+    );
+  }
+  private _filtrarEspecialistas(value: string): Especialista[] {
+    const filterValue = value.toLowerCase();
+    return this.especialistas.filter(esp =>
+      esp.nombre.toLowerCase().includes(filterValue)
+    );
+  }
 
   obtenerPisoPorBox(box: string): string {
     if (!box) return '';
@@ -126,16 +191,18 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
   }
 
   guardar(): void {
-  if (this.formulario.valid) {
-    this.dialogRef.close(this.formulario.value);
-  } 
+    if (this.formulario.valid) {
+      this.dialogRef.close(this.formulario.value);
+    }
   }
 
 
-onWheel(event: WheelEvent): void {
-  (event.target as HTMLInputElement).blur(); 
-  event.preventDefault();
-}
+  onWheel(event: WheelEvent): void {
+    (event.target as HTMLInputElement).blur();
+    event.preventDefault();
+  }
+
+
 
 }
 

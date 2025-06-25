@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AsignarHorarioDialogEspecialistaComponent } from '../asignar-horario-dialog-especialista/asignar-horario-dialog-especialista.component';
 import { Location } from '@angular/common';
+import { Especialista } from '../../services/especialista.service';
 
 
 interface HorarioEspecialista {
@@ -48,6 +49,14 @@ export class AgendaEspecialistasComponent implements OnInit {
   usuario = 'UsuarioEjemplo';
   rol = 'Administrador de Sistemas';
 
+  orarios: HorarioEspecialista[] = [];
+  filtros = {
+    especialista: '',
+    especialidad: '',
+    piso: '',
+    box: ''
+  };
+
   horarios: string[] = [];
   diasSemana: Date[] = [];
   fechaActual = new Date();
@@ -60,10 +69,13 @@ export class AgendaEspecialistasComponent implements OnInit {
 }
 
 
-  abrirFormularioAsignacion(): void {
+  abrirFormularioAsignacion(especialista: Especialista) {
   const dialogRef = this.dialog.open(AsignarHorarioDialogEspecialistaComponent, {
     width: '500px',
-    disableClose: true
+    disableClose: true,
+    data: {
+      especialista: especialista
+    }
   });
 
   dialogRef.afterClosed().subscribe(result => {
@@ -90,6 +102,13 @@ export class AgendaEspecialistasComponent implements OnInit {
 }
 
   
+especialistaSeleccionado: Especialista = {
+  id: 1,
+  nombre: 'Dra. Ana Ruiz',
+  especialidad: 'Cardiología',
+  piso : 5,
+
+};
   cerrarSesion() {
     this.router.navigate(['/login']);
   }
