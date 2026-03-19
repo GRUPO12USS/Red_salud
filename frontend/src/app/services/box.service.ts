@@ -34,4 +34,8 @@ export class BoxService {
   getBoxesDisponibles(): Observable<Box[]> {
     return this.http.get<Box[]>(`${this.apiUrl}disponibles/`);
   }
+
+  getDisponibles(): Observable<Box[]> {
+    return this.getBoxesDisponibles();
+  }
 }

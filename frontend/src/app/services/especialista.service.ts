@@ -18,8 +18,12 @@ export class EspecialistaService {
 
     constructor(private http: HttpClient) { }
 
-    getEspecialistas(): Observable<Especialista[]> {
-        return this.http.get<Especialista[]>(`${this.apiUrl}`);
+    getEspecialistas(params?: { estado?: string }): Observable<Especialista[]> {
+        let url = this.apiUrl;
+        if (params?.estado) {
+            url += `?estado=${params.estado}`;
+        }
+        return this.http.get<Especialista[]>(url);
     }
 
     getEspecialistasDisponibles(): Observable<Especialista[]> {

@@ -21,5 +21,6 @@ from reservas.views import home_view
 urlpatterns = [
      path('', home_view),
     path('admin/', admin.site.urls),
-    path('api/', include('reservas.urls')),  # API REST
+    path('api/', include('reservas.urls')),
+      path('', include('reservas.urls')),   # API REST
 ]

@@ -1,11 +1,10 @@
-export interface HorarioEspecialistaAPI {
+export interface HorarioEspecialista {
   id: number;
-  especialista: number;
-  especialista_nombre?: string;
-  box: number;
-  box_numero?: string;
-  fecha: string;
-  hora_inicio: string;
-  hora_fin: string;
-  estado: string;
+  especialista: string;
+  especialidad: string;
+  box: string;
+  piso: string;
+  fecha: Date;
+  horaInicio: string;
+  horaFin: string;
 }

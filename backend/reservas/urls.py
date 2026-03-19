@@ -10,6 +10,7 @@ router.register(r'pacientes', PacienteViewSet)
 router.register(r'horarios', HorarioViewSet)
 router.register(r'ofertas', OfertaEspecialistaViewSet)
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('api/', include(router.urls)),
@@ -18,4 +19,6 @@ urlpatterns = [
     path('api/especialistas-disponibles/', views.especialistas_disponibles),
     path('api/especialistas/', EspecialistaViewSet.as_view({'get': 'list'})),
     path('api/agenda-pacientes/', HorarioPacienteAPIView.as_view(), name='agenda-pacientes'),
+    path('api/agenda-especialistas/', AgendaEspecialistasAPIView.as_view(), name='agenda-especialistas'),
+
 ]

@@ -1,59 +1,129 @@
 <h2 mat-dialog-title>Agregar oferta de especialista</h2>
 
-<mat-dialog-content [formGroup]="formulario" class="formulario-oferta">
-  <div class="grid grid-cols-1 gap-4">
+<div mat-dialog-content>
+  <form [formGroup]="formulario" class="formulario-oferta">
 
-    <mat-form-field appearance="fill" class="full-width">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Especialista</mat-label>
-      <input matInput formControlName="especialista" required />
-
+      <mat-select formControlName="especialista" required>
+        <mat-option *ngFor="let esp of especialistas" [value]="esp.id">
+          {{ esp.nombre }} - {{ esp.especialidad }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formulario.get('especialista')?.invalid">
+        El especialista es requerido
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+      <button mat-raised-button color="accent" type="button" (click)="abrirFormularioEspecialista()" style="flex: 1;">
+        <mat-icon>add</mat-icon> Agregar
+      </button>
+      <button mat-raised-button color="primary" type="button" 
+        [disabled]="!formulario.get('especialista')?.value"
+        (click)="abrirFormularioEspecialista(obtenerEspecialistaSeleccionado())"
+        style="flex: 1;">
+        <mat-icon>edit</mat-icon> Editar
+      </button>
+      <button mat-raised-button color="warn" type="button" 
+        [disabled]="!formulario.get('especialista')?.value"
+        (click)="eliminarEspecialista(obtenerEspecialistaSeleccionado()!)"
+        style="flex: 1;">
+        <mat-icon>delete</mat-icon> Eliminar
+      </button>
+    </div>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Especialidad</mat-label>
-      <input matInput formControlName="especialidad" required/>
+      <input matInput formControlName="especialidad" required readonly/>
+      <mat-error *ngIf="formulario.get('especialidad')?.invalid">
+        La especialidad es requerida
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Fecha inicio</mat-label>
-      <input matInput [matDatepicker]="inicio" formControlName="fecha_inicio" [min]="minDate">
+      <input matInput [matDatepicker]="inicio" formControlName="fecha_inicio" [min]="minDate" required>
       <mat-datepicker-toggle matSuffix [for]="inicio"></mat-datepicker-toggle>
       <mat-datepicker #inicio></mat-datepicker>
+      <mat-error *ngIf="formulario.get('fecha_inicio')?.invalid">
+        La fecha de inicio es requerida
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Fecha fin</mat-label>
-      <input matInput [matDatepicker]="fin" formControlName="fecha_fin" [min]="minDate">
+      <input matInput [matDatepicker]="fin" formControlName="fecha_fin" [min]="minDate" required>
       <mat-datepicker-toggle matSuffix [for]="fin"></mat-datepicker-toggle>
       <mat-datepicker #fin></mat-datepicker>
+      <mat-error *ngIf="formulario.get('fecha_fin')?.invalid">
+        La fecha de fin es requerida
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Piso</mat-label>
-      <input matInput formControlName="especialidad" required/>
+      <mat-select formControlName="piso" required>
+        <mat-option *ngFor="let piso of pisosDisponibles" [value]="piso">
+          Piso {{ piso }} ({{ cantidadBoxesPorPiso[piso] || 0 }} boxes disponibles)
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formulario.get('piso')?.invalid">
+        Debe seleccionar un piso
+      </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Horario disponible</mat-label>
-      <input matInput formControlName="horario_disponible" placeholder="Ej: 08:00 - 12:00" />
-    </mat-form-field>
+    <div style="margin-bottom: 16px;">
+      <label style="font-size: 14px; color: rgba(0,0,0,0.6); margin-bottom: 8px; display: block;">
+        Horario disponible *
+      </label>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <mat-form-field appearance="fill" style="flex: 1;">
+          <mat-label>Hora inicio</mat-label>
+          <input matInput type="time" formControlName="hora_inicio" required>
+          <mat-error *ngIf="formulario.get('hora_inicio')?.invalid">
+            Requerida
+          </mat-error>
+        </mat-form-field>
+        
+        <span style="color: rgba(0,0,0,0.6); font-size: 18px;">-</span>
+        
+        <mat-form-field appearance="fill" style="flex: 1;">
+          <mat-label>Hora fin</mat-label>
+          <input matInput type="time" formControlName="hora_fin" required>
+          <mat-error *ngIf="formulario.get('hora_fin')?.invalid">
+            Requerida
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf="mensajeErrorHorario" style="color: #f44336; font-size: 12px; margin-top: 4px;">
+        {{ mensajeErrorHorario }}
+      </div>
+    </div>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Observaciones</mat-label>
       <textarea matInput formControlName="observaciones" rows="3"></textarea>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" style="width: 100%;">
       <mat-label>Estado</mat-label>
-      <mat-select formControlName="estado">
+      <mat-select formControlName="estado" required>
         <mat-option value="Disponible">Disponible</mat-option>
         <mat-option value="No Disponible">No Disponible</mat-option>
       </mat-select>
+      <mat-error *ngIf="formulario.get('estado')?.invalid">
+        Debe seleccionar un estado
+      </mat-error>
     </mat-form-field>
+  </form>
+</div>
 
-    <div class="botones-acciones">
-      <button mat-raised-button color="primary" [disabled]="formulario.invalid" (click)="guardar()">Guardar</button>
-      <button mat-button (click)="cancelar()">Cancelar</button>
-    </div>
-  </div>
-</mat-dialog-content>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [disabled]="formulario.invalid || !!mensajeErrorHorario" (click)="guardar()">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button (click)="cancelar()">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
+</div>

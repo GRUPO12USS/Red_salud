@@ -29,8 +29,9 @@ class Especialista(models.Model):
         return f"{self.nombre} - {self.especialidad}"
 
 class OfertaEspecialista(models.Model):
-    especialista = models.CharField(max_length=100)
+    especialista = models.ForeignKey(Especialista, on_delete=models.CASCADE, related_name='ofertas')
     especialidad = models.CharField(max_length=100)
+    piso = models.IntegerField(default=1)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     horario_disponible = models.CharField(max_length=200)

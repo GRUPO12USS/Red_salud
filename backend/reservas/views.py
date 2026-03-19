@@ -164,3 +164,31 @@ class OfertaEspecialistaViewSet(viewsets.ModelViewSet):
     queryset = OfertaEspecialista.objects.all()
     serializer_class = OfertaEspecialistaSerializer
     
+    def get_queryset(self):
+        """
+        Filtrado con validación de parámetros para evitar errores de conversión
+        """
+        queryset = OfertaEspecialista.objects.all()
+        
+        # Filtro por especialista_id con validación
+        especialista_id = self.request.query_params.get('especialista_id')
+        if especialista_id:
+            try:
+                especialista_id = int(especialista_id)
+                queryset = queryset.filter(especialista_id=especialista_id)
+            except (ValueError, TypeError):
+                # Si no es un número válido, ignorar el filtro
+                pass
+        
+        # Filtro por estado
+        estado = self.request.query_params.get('estado')
+        if estado:
+            queryset = queryset.filter(estado=estado)
+        
+        # Filtro por especialidad
+        especialidad = self.request.query_params.get('especialidad')
+        if especialidad:
+            queryset = queryset.filter(especialidad__icontains=especialidad)
+        
+        return queryset
+    

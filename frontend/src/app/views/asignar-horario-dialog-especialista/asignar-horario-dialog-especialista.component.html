@@ -1,70 +1,81 @@
 <h2 mat-dialog-title>Asignar horario a Especialista</h2>
 
-<mat-dialog-content [formGroup]="formulario" class="formulario-asignacion">
+<div mat-dialog-content>
+  <form [formGroup]="formulario" class="formulario-asignacion">
 
-    <div class="grid grid-cols-1 gap-4">
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Especialista</mat-label>
+      <mat-select formControlName="especialista" required>
+        <mat-option *ngFor="let especialista of especialistas" [value]="especialista.id">
+          {{ especialista.nombre }} - {{ especialista.especialidad }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formulario.get('especialista')?.invalid">
+        Debe seleccionar un especialista
+      </mat-error>
+    </mat-form-field>
 
-        <mat-form-field appearance="fill" class="full-width">
-  <mat-label>Especialista</mat-label>
-  <input
-    matInput
-    [matAutocomplete]="autoEsp"
-    formControlName="especialista"
-    required
-  />
-  <mat-autocomplete #autoEsp="matAutocomplete">
-    <mat-option
-      *ngFor="let e of ofertasFiltradas | async"
-      [value]="e.nombre"
-    >
-      {{ e.nombre }}
-    </mat-option>
-  </mat-autocomplete>
-</mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Especialidad</mat-label>
+      <input matInput formControlName="especialidad" readonly>
+    </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Especialidad</mat-label>
-            <input matInput formControlName="especialidad">
-        </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Número de Box</mat-label>
+      <mat-select formControlName="box" required>
+        <mat-option 
+          *ngFor="let box of getBoxesDisponiblesParaEspecialista()" 
+          [value]="box.numero">
+          Box {{ box.numero }} - Piso {{ box.piso }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formulario.get('box')?.invalid">
+        Debe seleccionar un box disponible
+      </mat-error>
+    </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Box</mat-label>
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Piso</mat-label>
+      <input matInput formControlName="piso" type="number" (wheel)="onWheel($event)" readonly>
+    </mat-form-field>
 
-            <input matInput type="number" pattern="[0-9]*" inputmode="numeric" formControlName="box"
-                (wheel)="onWheel($event)">
-
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Piso</mat-label>
-            <input matInput formControlName="piso" type="number" (wheel)="onWheel($event)">
-        </mat-form-field>
-
-        <div *ngIf="mensajeAdvertencia" class="advertencia-larga">
-            {{ mensajeAdvertencia }}
-        </div>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Fecha</mat-label>
-            <input matInput [matDatepicker]="pickerFecha" formControlName="fecha" [min]="minDate">
-            <mat-datepicker-toggle matSuffix [for]="pickerFecha"></mat-datepicker-toggle>
-            <mat-datepicker #pickerFecha></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Hora inicio</mat-label>
-            <input matInput type="time" formControlName="horaInicio">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Hora fin</mat-label>
-            <input matInput type="time" formControlName="horaFin">
-        </mat-form-field>
-        <div class="acciones-formulario">
-            <button mat-raised-button color="primary" type="submit" [disabled]="formulario.invalid"
-                (click)="guardar()">Guardar</button>
-            <button mat-button type="button" (click)="cancelar()">Cancelar</button>
-        </div>
-
+    <div *ngIf="mensajeAdvertencia" class="advertencia-larga">
+      {{ mensajeAdvertencia }}
     </div>
-</mat-dialog-content>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="pickerFecha" formControlName="fecha" [min]="minDate" required>
+      <mat-datepicker-toggle matSuffix [for]="pickerFecha"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFecha></mat-datepicker>
+      <mat-error *ngIf="formulario.get('fecha')?.invalid">
+        La fecha es requerida
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Hora inicio</mat-label>
+      <input matInput type="time" formControlName="horaInicio" required>
+      <mat-error *ngIf="formulario.get('horaInicio')?.invalid">
+        La hora de inicio es requerida
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Hora fin</mat-label>
+      <input matInput type="time" formControlName="horaFin" required>
+      <mat-error *ngIf="formulario.get('horaFin')?.invalid">
+        La hora de fin es requerida
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" [disabled]="formulario.invalid" (click)="guardar()">
+    <mat-icon>save</mat-icon> Guardar
+  </button>
+  <button mat-button (click)="cancelar()">
+    <mat-icon>cancel</mat-icon> Cancelar
+  </button>
+</div>

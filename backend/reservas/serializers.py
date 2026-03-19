@@ -99,7 +99,22 @@ class BoxViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+
 class OfertaEspecialistaSerializer(serializers.ModelSerializer):
+    especialista = EspecialistaSerializer(read_only=True)
+    especialista_id = serializers.PrimaryKeyRelatedField(queryset=Especialista.objects.all(), source='especialista', write_only=True)
+
     class Meta:
         model = OfertaEspecialista
-        fields = '__all__'
+        fields = [
+            'id',
+            'especialista',        # muestra los datos del especialista
+            'especialista_id',     # se usa al enviar (POST)
+            'especialidad',
+            'piso',
+            'fecha_inicio',
+            'fecha_fin',
+            'horario_disponible',
+            'observaciones',
+            'estado'
+        ]

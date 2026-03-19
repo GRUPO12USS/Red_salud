@@ -13,19 +13,10 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AsignarHorarioDialogEspecialistaComponent } from '../asignar-horario-dialog-especialista/asignar-horario-dialog-especialista.component';
 import { Location } from '@angular/common';
-import { Especialista } from '../../services/especialista.service';
-
-
-interface HorarioEspecialista {
-  id: number;
-  especialista: string;
-  especialidad: string;
-  box: string;
-  piso: string;
-  fecha: Date;
-  horaInicio: string;
-  horaFin: string;
-}
+import { Especialista } from '../../services/especialista.service'
+import { HorarioEspecialistaService } from '../../services/horario-especialista.service';
+import { HorarioEspecialistaAPI } from '../../models/horario-especialista-api.model';
+import { HorarioEspecialista } from '../../services/horario-especialista.service';
 
 @Component({
   standalone: true,
@@ -47,7 +38,7 @@ interface HorarioEspecialista {
 })
 export class AgendaEspecialistasComponent implements OnInit {
   usuario = 'UsuarioEjemplo';
-  rol = 'Administrador de Sistemas';
+  rol = 'Coordinador de Box';
 
   orarios: HorarioEspecialista[] = [];
   filtros = {
@@ -57,58 +48,61 @@ export class AgendaEspecialistasComponent implements OnInit {
     box: ''
   };
 
+  //horariosAPI: HorarioEspecialistaAPI[] = [];
+
   horarios: string[] = [];
   diasSemana: Date[] = [];
   fechaActual = new Date();
   formularioVisible: boolean = false;
 
-  constructor(private router: Router, private dialog: MatDialog, private location: Location) { }
+  constructor(private router: Router, private dialog: MatDialog, private location: Location, private horarioService: HorarioEspecialistaService,) { }
 
   volverAtras(): void {
-  this.location.back();
-}
+    this.location.back();
+  }
 
 
   abrirFormularioAsignacion(especialista: Especialista) {
-  const dialogRef = this.dialog.open(AsignarHorarioDialogEspecialistaComponent, {
-    width: '500px',
-    disableClose: true,
-    data: {
-      especialista: especialista
-    }
-  });
+    const dialogRef = this.dialog.open(AsignarHorarioDialogEspecialistaComponent, {
+      width: '500px',
+      disableClose: true,
+      data: {
+        especialista: especialista
+      }
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      console.log('Horario recibido desde el modal:', result);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Horario recibido desde el modal:', result);
+        this.cargarHorariosDesdeApi();
 
-      const nuevoId = this.horariosEspecialistas.length + 1;
+        const nuevoId = this.horariosEspecialistas.length + 1;
 
-      const nuevoHorario: HorarioEspecialista = {
-        id: nuevoId,
-        especialista: result.especialista,
-        especialidad: result.especialidad,
-        box: result.box,
-        piso: result.piso,
-        fecha: new Date(result.fecha),
-        horaInicio: result.horaInicio,
-        horaFin: result.horaFin
-      };
+        const nuevoHorario: HorarioEspecialista = {
+          id: nuevoId,
+          especialista: result.especialista,
+          especialidad: result.especialidad,
+          box: result.box,
+          piso: result.piso,
+          fecha: new Date(result.fecha),
+          horaInicio: result.horaInicio,
+          horaFin: result.horaFin
+        };
 
-      this.horariosEspecialistas.push(nuevoHorario);
-      this.aplicarFiltros();
-    }
-  });
-}
+        this.horariosEspecialistas.push(nuevoHorario);
+        this.aplicarFiltros();
+      }
+    });
+  }
 
-  
-especialistaSeleccionado: Especialista = {
-  id: 1,
-  nombre: 'Dra. Ana Ruiz',
-  especialidad: 'Cardiología',
-  piso : 5,
 
-};
+  especialistaSeleccionado: Especialista = {
+    id: 1,
+    nombre: 'Dra. Ana Ruiz',
+    especialidad: 'Cardiología',
+    piso: 5,
+
+  };
   cerrarSesion() {
     this.router.navigate(['/login']);
   }
@@ -119,6 +113,14 @@ especialistaSeleccionado: Especialista = {
   mostrandoFormulario = false;
   nuevoHorario: HorarioEspecialista = this.getHorarioVacio();
 
+  cargarHorariosDesdeApi(): void {
+  this.horarioService.getHorarios().subscribe(data => {
+    this.horariosEspecialistas = data;
+    this.aplicarFiltros();
+  });
+}
+
+
   filtrosForm = new FormGroup({
     especialista: new FormControl(''),
     especialidad: new FormControl(''),
@@ -127,10 +129,16 @@ especialistaSeleccionado: Especialista = {
   });
 
   ngOnInit(): void {
+    this.horarioService.getHorarios().subscribe((data: HorarioEspecialista[]) => {
+    this.horariosEspecialistas = data;
+    this.aplicarFiltros();
+  });
+
+
     this.generarHorarios('08:00', '19:30', 30);
     this.generarDiasSemana(this.fechaActual);
-    this.cargarHorariosIniciales();
-    this.aplicarFiltros();
+    //this.aplicarFiltros();
+    this.cargarHorariosDesdeApi();
 
     this.filtrosForm.valueChanges.subscribe(() => {
       this.aplicarFiltros();
@@ -138,8 +146,8 @@ especialistaSeleccionado: Especialista = {
   }
 
   limpiarFiltros(): void {
-  this.filtrosForm.reset();
-}
+    this.filtrosForm.reset();
+  }
 
   getHorarioVacio(): HorarioEspecialista {
     return {
@@ -260,6 +268,11 @@ especialistaSeleccionado: Especialista = {
     const bloqueFin = bloqueInicio + 30;
 
     return this.horariosFiltrados.filter(r => {
+      // Validar que el horario tenga los campos necesarios
+      if (!r.horaInicio || !r.fecha) {
+        return false;
+      }
+
       const mismaFecha =
         r.fecha.getFullYear() === dia.getFullYear() &&
         r.fecha.getMonth() === dia.getMonth() &&

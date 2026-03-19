@@ -80,56 +80,53 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
       piso: [{ value: '', disabled: false }, Validators.required],
     });
   }
+    this.formulario = this.fb.group({
+      especialista: ['', Validators.required],
+      especialidad: [null, Validators.required],
+      box: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+      piso: [null, Validators.required],
+      fecha: [null, Validators.required],
+      horaInicio: [null, Validators.required],
+      horaFin: [null, Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    // Cargar especialistas disponibles
-    this.especialistaService.getEspecialistas({ estado: 'Disponible' }).subscribe({
-      next: (res: Especialista[]) => {
-        this.especialistas = res;
-        console.log('Especialistas disponibles:', this.especialistas);
-      },
-      error: (err: any) => console.error('Error al cargar especialistas', err)
-    });
-
     // Cargar solo ofertas disponibles
     this.ofertaService.getOfertas({ estado: 'Disponible' }).subscribe({
-      next: (res: OfertaEspecialista[]) => {
+      next: (res) => {
         console.log('Ofertas disponibles cargadas:', res);
         this.ofertas = res.filter(oferta => oferta.estado === 'Disponible');
       },
-      error: (err: any) => console.error('Error al cargar ofertas', err)
+      error: (err) => console.error('Error al cargar ofertas', err)
     });
 
     // Cargar solo boxes disponibles
     this.boxService.getDisponibles().subscribe({
-      next: (res: Box[]) => {
+      next: (res) => {
         this.boxes = res.filter(box => box.estado === 'disponible');
         console.log('Boxes disponibles:', this.boxes);
       },
-      error: (err: any) => console.error('Error al cargar boxes', err)
+      error: (err) => console.error('Error al cargar boxes', err)
     });
 
     // Cuando cambia el especialista, cargar su información y validar horarios
-    this.formulario.get('especialista')?.valueChanges.subscribe((especialistaId: number) => {
-      const especialista = this.especialistas.find(e => e.id === especialistaId);
+    this.formulario.get('especialista')?.valueChanges.subscribe(especialistaId => {
       const oferta = this.ofertas.find(o => o.especialista.id === especialistaId);
-      
-      if (especialista) {
-        this.formulario.patchValue({ 
-          especialidad: especialista.especialidad 
-        }, { emitEvent: false });
-      }
-      
       if (oferta) {
-        // Filtrar boxes del piso del especialista según la oferta
-        const boxesDelPiso = this.boxes.filter((b: Box) => b.piso === oferta.piso);
+        this.formulario.patchValue({ 
+          especialidad: oferta.especialista.especialidad 
+        }, { emitEvent: false });
+        
+        // Filtrar boxes del piso del especialista
+        const boxesDelPiso = this.boxes.filter(b => b.piso === oferta.piso);
         console.log(`Boxes disponibles en piso ${oferta.piso}:`, boxesDelPiso);
       }
     });
 
     // Auto-detectar piso según box seleccionado
-    this.formulario.get('box')?.valueChanges.subscribe((boxNumero: number) => {
-      const box = this.boxes.find((b: Box) => b.numero === Number(boxNumero));
+    this.formulario.get('box')?.valueChanges.subscribe(boxNumero => {
+      const box = this.boxes.find(b => b.numero === Number(boxNumero));
       if (box) {
         this.pisoAutoDetectado = box.piso;
         this.formulario.patchValue({ piso: box.piso }, { emitEvent: false });
@@ -138,7 +135,7 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
     });
 
     // Validar si el usuario modifica el piso manualmente
-    this.formulario.get('piso')?.valueChanges.subscribe((pisoManual: number) => {
+    this.formulario.get('piso')?.valueChanges.subscribe(pisoManual => {
       if (this.pisoAutoDetectado && pisoManual !== this.pisoAutoDetectado) {
         this.mensajeAdvertencia = `⚠️ Estás modificando el piso detectado automáticamente (${this.pisoAutoDetectado}).`;
       } else {
@@ -169,7 +166,7 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
     }
 
     // Parsear el horario disponible de la oferta
-    const horarios = oferta.horario_disponible.split('-').map((h: string) => h.trim());
+    const horarios = oferta.horario_disponible.split('-').map(h => h.trim());
     if (horarios.length !== 2) {
       this.mensajeAdvertencia = '';
       return;
@@ -247,55 +244,42 @@ export class AsignarHorarioDialogEspecialistaComponent implements OnInit {
   }
 
   guardar(): void {
-    if (this.formulario.invalid) {
-      console.log('Formulario inválido:', this.formulario.errors);
-      console.log('Valores:', this.formulario.value);
-      return;
-    }
-
-    const formValue = this.formulario.value;
-
-    // Buscar el box por número para obtener su ID
-    const boxSeleccionado = this.boxes.find((b: Box) => b.numero === Number(formValue.box));
-    
-    if (!boxSeleccionado || !boxSeleccionado.id) {
-      console.error('No se pudo encontrar el box con número:', formValue.box);
-      return;
-    }
-
-    const payload = {
-      especialista: formValue.especialista,  // ID numérico del especialista
-      box: boxSeleccionado.id,               // ID del box (no el número)
-      fecha: formValue.fecha.toISOString().split('T')[0],  // convertir a 'YYYY-MM-DD'
-      hora_inicio: formValue.horaInicio,    // 'HH:MM'
-      hora_fin: formValue.horaFin,           // 'HH:MM'
-      disponible: true
-    };
-
-    console.log('Payload a enviar:', payload);
-
-    this.horarioService.crearHorario(payload).subscribe({
-      next: (nuevoHorario: any) => {
-        console.log('Horario creado exitosamente:', nuevoHorario);
-        this.dialogRef.close(nuevoHorario);
-      },
-      error: (err: any) => {
-        console.error('Error al crear horario:', err);
-        console.error('Detalle del error:', err.error);
-        alert(`Error al crear horario: ${JSON.stringify(err.error)}`);
-      }
-    });
+  if (this.formulario.invalid) {
+    return;
   }
+
+  const formValue = this.formulario.value;
+
+  const payload = {
+    especialista: formValue.especialista,  // ID numérico
+    box: formValue.box,                    // ID numérico
+    fecha: formValue.fecha.toISOString().split('T')[0],  // convertir a 'YYYY-MM-DD'
+    hora_inicio: formValue.horaInicio,    // 'HH:MM'
+    hora_fin: formValue.horaFin,           // 'HH:MM'
+    disponible: true                       // opcional, puedes enviarlo
+  };
+
+  console.log('Payload a enviar:', payload);
+
+  this.horarioService.crearHorario(payload).subscribe({
+    next: (nuevoHorario) => {
+      this.dialogRef.close(nuevoHorario);
+    },
+    error: (err) => {
+      console.error('Error al crear horario:', err);
+    }
+  });
+}
+
+
 
   onWheel(event: WheelEvent): void {
     (event.target as HTMLInputElement).blur();
     event.preventDefault();
   }
 
-  obtenerEspecialistaSeleccionado(): Especialista | undefined {
-    const especialistaId = this.formulario.get('especialista')?.value;
-    return this.especialistas.find(e => e.id === especialistaId);
-  }
+
+
 }
 
 

@@ -86,13 +86,20 @@ export class OfertaEspecialistasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        // Transformar el campo especialista a especialista_id para el backend
+        const payload = {
+          ...result,
+          especialista_id: result.especialista,
+        };
+        delete payload.especialista; // Eliminar el campo original
+
         if (result.id) {
-          this.ofertaService.actualizarOferta(result).subscribe({
+          this.ofertaService.actualizarOferta({ ...result, ...payload }).subscribe({
             next: () => this.cargarOfertas(),
             error: (err) => console.error('Error actualizando oferta:', err)
           });
         } else {
-          this.ofertaService.crearOferta(result).subscribe({
+          this.ofertaService.crearOferta(payload).subscribe({
             next: () => this.cargarOfertas(),
             error: (err) => console.error('Error creando oferta:', err)
           });

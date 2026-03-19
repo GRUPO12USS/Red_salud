@@ -32,7 +32,11 @@ export interface HorarioEspecialista {
 export class HorarioEspecialistaService {
   private apiUrl = 'http://localhost:8000/api/agenda-especialistas/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  crearHorario(data: any): Observable<any> {
+    return this.http.post('http://localhost:8000/api/horarios/', data);
+  }
 
   getHorarios(filtros?: any): Observable<HorarioEspecialista[]> {
     let params = new HttpParams();
@@ -44,14 +48,14 @@ export class HorarioEspecialistaService {
       });
     }
 
-    return this.http.get<any[]>(this.apiUrl, { params }).pipe(
+    return this.http.get<HorarioEspecialistaAPI[]>(this.apiUrl, { params }).pipe(
       map(data =>
         data.map(item => ({
           id: item.id,
           especialista: item.especialista_nombre || '',
-          especialidad: '', // si necesitas cargarla aparte
+          especialidad: '', // Podrás rellenarla luego
           box: item.box_numero || '',
-          piso: '', // si lo tienes en otra relación
+          piso: '', // Podrás rellenarla luego
           fecha: new Date(item.fecha),
           horaInicio: item.hora_inicio,
           horaFin: item.hora_fin
